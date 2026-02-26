@@ -1,0 +1,12 @@
+#!/bin/bash
+
+FILE="/mnt/Users.csv"
+DOMAIN="AU-TEAM.IRPO"
+ADMIN_USER="Administrator"
+ADMIN_PASS="P@ssw0rd"
+
+while IFS=';' read -r firstname lastname role phone ou street zip city country password; do
+	password=$ (echo "$password | tr -d '[:space:]')
+	samba-tool ou create "OU=${ou},DC=AU-TEAM,DC=IRPO"
+	samba-tool user add "$firstname.$lastname" "$password"
+done < <(tail -n +2 "$FILE")
